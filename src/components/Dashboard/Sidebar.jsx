@@ -38,7 +38,7 @@ export default function Sidebar({
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6">
-            <h1 className="text-2xl font-bold">MyApp</h1>
+            <h1 className="text-2xl font-bold">BackupHub </h1>
           </div>
 
           {/* Navigation */}
