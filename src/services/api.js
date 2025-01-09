@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://10.0.12.94:45455/api/v1/Backup",
-  });
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+});
 
 export default api;
