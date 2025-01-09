@@ -13,18 +13,21 @@ export default function Dashboard() {
     setShowDbForm(true);
     setShowBackups(false); // Ensure Backups view is hidden
     setShowDatabases(false); // Ensure Backups view is hidden
+    console.log("Clicked....");
   };
 
   const handleShowBackups = () => {
     setShowBackups(true);
     setShowDbForm(false); // Ensure Registration form is hidden
     setShowDatabases(false); // Ensure Backups view is hidden
+    console.log("Clicked....1");
   };
 
   const handleShowDatabases = () => {
     setShowBackups(false);
     setShowDbForm(false); // Ensure Registration form is hidden
     setShowDatabases(true); // Ensure Backups view is hidden
+    console.log("Clicked....2");
   };
 
   return (
@@ -57,8 +60,4 @@ export default function Dashboard() {
       </main>
     </div>
   );
-}
-
-{
-  /* <Backups /> */
 }

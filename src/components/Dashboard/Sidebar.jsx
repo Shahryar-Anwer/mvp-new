@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { icon: Home, label: "Dashboard", href: "#" },
-  { icon: BarChart2, label: "Analytics", href: "#" },
+  { icon: Home, label: "Register Database", action: "register" },
+  { icon: FileText, label: "Backup", action: "backup" },
 ];
 
 const projectItems = [
