@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios
-import { Database, CheckCircle, XCircle } from "lucide-react";
+import { Database, CheckCircle, XCircle, Loader } from "lucide-react"; // Import Loader icon for spinner
 import api from "../../services/api";
+
 function DbRegistrationForm() {
   const [credentials, setCredentials] = useState({
     host: "localhost",
@@ -19,10 +20,7 @@ function DbRegistrationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const endpoint = "http://10.0.12.94:45455/api/v1/Backup/RegisterDatabase";
-
     try {
-      // const response = await axios.post(endpoint, {
       const response = await api.post("/RegisterDatabase", {
         postgresPassword: credentials.password,
         postgresUser: credentials.user,
@@ -30,24 +28,16 @@ function DbRegistrationForm() {
         postgresDatabase: credentials.database,
       });
 
-      console.log(response, "response");
-
       if (response.data.success || response.data) {
         setNotification({
           show: true,
           success: true,
           message: "Backup completed successfully!",
         });
-        setLoading(false);
       } else {
-        setLoading(false);
-
         throw new Error(response.data.message || "Failed to complete backup");
       }
     } catch (error) {
-      setLoading(false);
-
-      console.error("Error during backup:", error);
       setNotification({
         show: true,
         success: false,
@@ -56,6 +46,8 @@ function DbRegistrationForm() {
           error.message ||
           "Failed to complete backup",
       });
+    } finally {
+      setLoading(false);
     }
 
     // Hide notification after 3 seconds
@@ -79,9 +71,7 @@ function DbRegistrationForm() {
         <div
           className={`fixed top-4 right-4 z-50 p-4 rounded-md transform transition-transform duration-300 ${
             notification.success ? "bg-green-50" : "bg-red-50"
-          } flex items-center gap-2 shadow-md ${
-            notification.show ? "translate-x-0" : "translate-x-full"
-          }`}
+          } flex items-center gap-2 shadow-md`}
         >
           {notification.success ? (
             <CheckCircle className="w-5 h-5 text-green-500" />
@@ -178,13 +168,17 @@ function DbRegistrationForm() {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center gap-2"
+          disabled={loading} // Disable the button when loading
         >
-          {loading ? "Loading..." : "Backup Database"}
+          {loading ? (
+            <Loader className="animate-spin w-5 h-5 text-white" />
+          ) : (
+            "Backup Database"
+          )}
         </button>
       </form>
     </div>
-    // </div>
   );
 }
 

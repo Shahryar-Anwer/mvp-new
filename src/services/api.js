@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL, // Use the environment variable
+  baseURL: "http://10.0.12.94:45455/api/v1/Backup",
   });
 
 export default api;
