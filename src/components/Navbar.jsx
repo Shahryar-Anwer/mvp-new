@@ -1,35 +1,20 @@
-// src/components/Navbar.jsx
 import React from "react";
-import { Link } from "react-router-dom";
-import "../styles/Navbar.scss";
+import "../styles/NavBar.scss";
 
-const Navbar = () => {
+const NavBar = () => {
+  const handleLogout = () => {
+    // handle logout logic
+    console.log("Logging out...");
+  };
+
   return (
     <nav className="navbar">
-      <div className="navbar__brand">Backup &amp; Archival</div>
-      <ul className="navbar__links">
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-        {/* The following links would ideally be shown only if logged in */}
-        <li>
-          <Link to="/dashboard">Dashboard</Link>
-        </li>
-        <li>
-          <Link to="/backup-management">Backups</Link>
-        </li>
-        <li>
-          <Link to="/archive-management">Archives</Link>
-        </li>
-        <li>
-          <Link to="/settings">Settings</Link>
-        </li>
-      </ul>
+      <div className="navbar__brand">My Backup App</div>
+      <button className="navbar__logout" onClick={handleLogout}>
+        Logout
+      </button>
     </nav>
   );
 };
 
-export default Navbar;
+export default NavBar;

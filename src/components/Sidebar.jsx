@@ -2,17 +2,24 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Sidebar.scss";
 
+// Example logo (placeholder). Replace with your own image/logo.
+const appLogoUrl = "https://via.placeholder.com/150?text=App+Logo";
+
 const Sidebar = () => {
   return (
     <aside className="sidebar">
-      <ul>
-        {/* Replace the routes below with real paths once available */}
+      <div className="sidebar__logo">
+        <img src={appLogoUrl} alt="App Logo" />
+      </div>
+
+      <ul className="sidebar__nav">
         <li>
-          <Link to="/register-db">Register DB</Link>
+          <Link to="/home">Home</Link>
         </li>
         <li>
-          <Link to="/backups">Backups</Link>
+          <Link to="/about">About</Link>
         </li>
+        {/* Add more links: /register-db, /backups, etc. */}
       </ul>
     </aside>
   );

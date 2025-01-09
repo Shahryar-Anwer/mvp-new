@@ -1,0 +1,26 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh; // fill the screen vertically if needed
+  
+    &__body {
+      display: flex;
+      flex: 1;       // grows to fill remaining vertical space
+      width: 100%;   // ensure full width
+    }
+  
+    &__content {
+      flex: 1;       // take all remaining horizontal space
+      padding: 1rem; // some spacing
+      background: #fff;
+    }
+  }
+  html,
+  body,
+  #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }

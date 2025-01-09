@@ -1,25 +1,39 @@
 .sidebar {
-  width: 200px;
+  width: 200px;      // fixed sidebar width
   background-color: #f4f4f4;
   padding: 1rem;
-  height: 100vh; // Ensures sidebar spans the full viewport height
-}
+  box-sizing: border-box;
 
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+  // The sidebar will naturally sit to the left because
+  // its parent (.layout__body) uses display: flex, and .sidebar
+  // appears before .layout__content in the DOM.
 
-.sidebar li {
-  margin-bottom: 1rem;
-}
+  &__logo {
+    text-align: center;
+    margin-bottom: 1rem;
 
-.sidebar a {
-  color: #333;
-  text-decoration: none;
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+  }
 
-  &:hover {
-    text-decoration: underline;
+  &__nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 1rem;
+
+      a {
+        color: #333;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
