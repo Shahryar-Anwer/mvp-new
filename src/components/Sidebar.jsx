@@ -1,4 +1,3 @@
-// src/components/Sidebar.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Sidebar.scss";
@@ -7,17 +6,12 @@ const Sidebar = () => {
   return (
     <aside className="sidebar">
       <ul>
+        {/* Replace the routes below with real paths once available */}
         <li>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/register-db">Register DB</Link>
         </li>
         <li>
-          <Link to="/backup-management">Backups</Link>
-        </li>
-        <li>
-          <Link to="/archive-management">Archives</Link>
-        </li>
-        <li>
-          <Link to="/settings">Settings</Link>
+          <Link to="/backups">Backups</Link>
         </li>
       </ul>
     </aside>
