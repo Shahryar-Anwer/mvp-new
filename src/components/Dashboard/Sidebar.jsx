@@ -14,9 +14,13 @@ import {
   TrendingUp,
   Calendar,
   Target,
+  PlusCircle,
 } from "lucide-react";
 
-const navItems = [{ icon: FileText, label: "Backups", href: "#" }];
+const navItems = [
+  { icon: PlusCircle, label: "Register DB", action: "register" },
+  { icon: FileText, label: "Backups", href: "#" },
+];
 
 const projectItems = [
   { label: "Database 1", href: "#" },
@@ -29,7 +33,8 @@ const reportItems = [
   { label: "Statistics", href: "#" },
   { label: "Monthly Review", href: "#" },
 ];
-export default function Sidebar() {
+
+export default function Sidebar({ onRegisterDb }) {
   const [isOpen, setIsOpen] = useState(false);
   const [projectsOpen, setProjectsOpen] = useState(false);
   const [reportsOpen, setReportsOpen] = useState(false);
@@ -71,13 +76,23 @@ export default function Sidebar() {
               {/* Regular Menu Items */}
               {navItems.map((item) => (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
-                    className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
-                  >
-                    <item.icon size={20} />
-                    <span className="text-sm font-medium">{item.label}</span>
-                  </a>
+                  {item.action === "register" ? (
+                    <button
+                      onClick={onRegisterDb}
+                      className="w-full flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
+                    >
+                      <item.icon size={20} />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </button>
+                  ) : (
+                    <a
+                      href={item.href}
+                      className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
+                    >
+                      <item.icon size={20} />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </a>
+                  )}
                 </li>
               ))}
 
