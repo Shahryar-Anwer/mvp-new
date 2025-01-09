@@ -19,7 +19,7 @@ import {
 
 const navItems = [
   { icon: PlusCircle, label: "Register DB", action: "register" },
-  { icon: FileText, label: "Backups", href: "#" },
+  { icon: FileText, label: "Backups", href: "#", action: "backup" },
 ];
 
 const projectItems = [
@@ -34,7 +34,7 @@ const reportItems = [
   { label: "Monthly Review", href: "#" },
 ];
 
-export default function Sidebar({ onRegisterDb }) {
+export default function Sidebar({ onRegisterDb, onBackupDb }) {
   const [isOpen, setIsOpen] = useState(false);
   const [projectsOpen, setProjectsOpen] = useState(false);
   const [reportsOpen, setReportsOpen] = useState(false);
@@ -79,6 +79,14 @@ export default function Sidebar({ onRegisterDb }) {
                   {item.action === "register" ? (
                     <button
                       onClick={onRegisterDb}
+                      className="w-full flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
+                    >
+                      <item.icon size={20} />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </button>
+                  ) : item.action === "backup" ? (
+                    <button
+                      onClick={onBackupDb}
                       className="w-full flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
                     >
                       <item.icon size={20} />
