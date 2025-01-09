@@ -5,7 +5,7 @@ import Backups from "./Backups";
 import Databases from "./Databases";
 
 export default function Dashboard() {
-  const [showDbForm, setShowDbForm] = useState(false);
+  const [showDbForm, setShowDbForm] = useState(true);
   const [showBackups, setShowBackups] = useState(false);
   const [showDatabases, setShowDatabases] = useState(false);
 
