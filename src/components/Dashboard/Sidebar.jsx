@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Home,
   Users,
@@ -6,26 +6,21 @@ import {
   Menu,
   X,
   BarChart2,
-  Mail,
   ChevronDown,
   Folder,
   FileText,
-  PieChart,
-  TrendingUp,
-  Calendar,
-  Target,
-  PlusCircle,
+  LogOut,
 } from "lucide-react";
 
 const navItems = [
-  { icon: PlusCircle, label: "Register DB", action: "register" },
-  { icon: FileText, label: "Backups", href: "#", action: "backup" },
+  { icon: Home, label: "Dashboard", href: "#" },
+  { icon: BarChart2, label: "Analytics", href: "#" },
 ];
 
 const projectItems = [
-  { label: "Database 1", href: "#" },
-  { label: "Database 2", href: "#" },
-  { label: "Database 3", href: "#" },
+  { label: "Active Projects", href: "#" },
+  { label: "Project Timeline", href: "#" },
+  { label: "Project Goals", href: "#" },
 ];
 
 const reportItems = [
@@ -41,6 +36,13 @@ export default function Sidebar({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [projectsOpen, setProjectsOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef(null);
+
+  const handleLogout = () => {
+    console.log("Logging out...");
+    // Add your logout logic here
+  };
 
   const DropdownItem = ({ label, href }) => (
     <a
@@ -140,17 +142,35 @@ export default function Sidebar({
           </nav>
 
           {/* User Profile */}
-          <div className="p-4 border-t border-gray-800">
-            <div className="flex items-center gap-4">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt="User"
-                className="w-10 h-10 rounded-full"
-              />
-              <div>
-                <p className="text-sm font-medium">John Doe</p>
-                <p className="text-xs text-gray-400">john@example.com</p>
-              </div>
+          <div className="p-4 border-t border-gray-800" ref={profileMenuRef}>
+            <div className="relative">
+              <button
+                onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                className="flex items-center gap-4 w-full hover:bg-gray-800 p-2 rounded-lg transition-colors"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt="User"
+                  className="w-10 h-10 rounded-full"
+                />
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-medium">John Doe</p>
+                  <p className="text-xs text-gray-400">john@example.com</p>
+                </div>
+              </button>
+
+              {/* Profile Menu */}
+              {profileMenuOpen && (
+                <div className="absolute bottom-full left-0 w-full mb-2 bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+                  >
+                    <LogOut size={16} />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
