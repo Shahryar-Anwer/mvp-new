@@ -34,10 +34,13 @@ const reportItems = [
   { label: "Monthly Review", href: "#" },
 ];
 
-export default function Sidebar({ onRegisterDb, onBackupDb }) {
+export default function Sidebar({
+  onRegisterDb,
+  onBackupDb,
+  onBackupDatabases,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [projectsOpen, setProjectsOpen] = useState(false);
-  const [reportsOpen, setReportsOpen] = useState(false);
 
   const DropdownItem = ({ label, href }) => (
     <a
@@ -107,19 +110,21 @@ export default function Sidebar({ onRegisterDb, onBackupDb }) {
               {/* Projects Dropdown */}
               <li>
                 <button
-                  onClick={() => setProjectsOpen(!projectsOpen)}
+                  onClick={() => {
+                    onBackupDatabases();
+                  }}
                   className="w-full flex items-center justify-between gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <Folder size={20} />
                     <span className="text-sm font-medium">Databases</span>
                   </div>
-                  <ChevronDown
+                  {/* <ChevronDown
                     size={16}
                     className={`transform transition-transform duration-200 ${
                       projectsOpen ? "rotate-180" : ""
                     }`}
-                  />
+                  /> */}
                 </button>
                 <div
                   className={`mt-1 overflow-hidden transition-all duration-200 ease-in-out ${
