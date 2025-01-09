@@ -1,22 +1,90 @@
-import React, { useState } from "react";
-import { Database, Save, Calendar, ChevronDown } from "lucide-react";
-
-// Generate 20 sample databases
-const databases = Array.from({ length: 20 }, (_, i) => ({
-  id: i + 1,
-  name: `Database ${i + 1}`,
-}));
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Database,
+  Save,
+  Calendar,
+  ChevronDown,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 
 const backupFrequencies = ["Daily", "Weekly", "Monthly"];
 
 export default function Databases() {
+  const [databases, setDatabases] = useState([]); // Dynamically fetched databases
   const [selectedDates, setSelectedDates] = useState({});
   const [showCalendar, setShowCalendar] = useState({});
   const [selectedFrequencies, setSelectedFrequencies] = useState({});
   const [showFrequencyDropdown, setShowFrequencyDropdown] = useState({});
+  const [notification, setNotification] = useState({
+    show: false,
+    success: false,
+    message: "",
+  });
+  const [loading, setLoading] = useState(true);
 
-  const handleBackup = (dbId) => {
-    console.log(`Backing up database ${dbId}`);
+  // Fetch databases from an API
+  useEffect(() => {
+    const fetchDatabases = async () => {
+      try {
+        const response = await axios.get(
+          "http://10.0.12.94:45455/api/v1/Backup"
+        ); // Replace with your API endpoint
+
+        setDatabases(response.data); // Assuming the API returns a list of databases
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching databases:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchDatabases();
+  }, []);
+
+  const handleBackup = async (dbId, connectionStringDB) => {
+    const date = selectedDates[dbId];
+    const frequency = selectedFrequencies[dbId];
+
+    // if (!date || !frequency) {
+    //   setNotification({
+    //     show: true,
+    //     success: false,
+    //     message: "Please select both a date and a frequency before backing up.",
+    //   });
+    //   setTimeout(() => {
+    //     setNotification({ show: false, success: false, message: "" });
+    //   }, 3000);
+    //   return;
+    // }
+
+    console.log(connectionStringDB, "connectionStringDB");
+
+    const connectionStringEncoded = encodeURIComponent(connectionStringDB); // Encode the connection string to ensure it's URL-safe
+    const endpoint = `http://10.0.12.94:45455/api/v1/Backup/CreateBackup?ConnectionString=${connectionStringEncoded}`;
+
+    try {
+      const response = await axios.post(endpoint); // Use POST without a request body
+      console.log(response, "response from create Backup");
+      setNotification({
+        show: true,
+        success: true,
+        message: `Backup initiated successfully for database ${dbId}.`,
+      });
+    } catch (error) {
+      console.error("Error initiating backup:", error);
+      setNotification({
+        show: true,
+        success: false,
+        message: "Failed to initiate backup. Please try again.",
+      });
+    }
+
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      setNotification({ show: false, success: false, message: "" });
+    }, 3000);
   };
 
   const handleDateSelect = (dbId, date) => {
@@ -36,8 +104,36 @@ export default function Databases() {
     }));
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 overflow-hidden">
+      {/* Notification Popup */}
+      {notification.show && (
+        <div
+          className={`fixed top-4 right-4 z-50 p-4 rounded-md transform transition-transform duration-300 ${
+            notification.success ? "bg-green-50" : "bg-red-50"
+          } flex items-center gap-2 shadow-md ${
+            notification.show ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {notification.success ? (
+            <CheckCircle className="w-5 h-5 text-green-500" />
+          ) : (
+            <XCircle className="w-5 h-5 text-red-500" />
+          )}
+          <p
+            className={`text-sm ${
+              notification.success ? "text-green-700" : "text-red-700"
+            }`}
+          >
+            {notification.message}
+          </p>
+        </div>
+      )}
+
       <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
         <Database className="h-5 w-5" />
         Database Management
@@ -56,7 +152,7 @@ export default function Databases() {
             <div className="flex items-center gap-3">
               {/* Backup Button */}
               <button
-                onClick={() => handleBackup(db.id)}
+                onClick={() => handleBackup(db.id, db.connectionStringDB)}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               >
                 <Save className="h-4 w-4" />
