@@ -1,32 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  Home,
-  Users,
-  Settings,
-  Menu,
-  X,
-  BarChart2,
-  ChevronDown,
-  Folder,
-  FileText,
-  LogOut,
-} from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Home, FileText, Folder, Menu, X, LogOut } from "lucide-react";
 
 const navItems = [
   { icon: Home, label: "Register Database", action: "register" },
-  { icon: FileText, label: "Backup", action: "backup" },
-];
-
-const projectItems = [
-  { label: "Active Projects", href: "#" },
-  { label: "Project Timeline", href: "#" },
-  { label: "Project Goals", href: "#" },
-];
-
-const reportItems = [
-  { label: "Performance", href: "#" },
-  { label: "Statistics", href: "#" },
-  { label: "Monthly Review", href: "#" },
+  { icon: FileText, label: "Backup", action: "backup", status: "coming-soon" },
 ];
 
 export default function Sidebar({
@@ -35,23 +12,12 @@ export default function Sidebar({
   onBackupDatabases,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [projectsOpen, setProjectsOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
 
   const handleLogout = () => {
     console.log("Logging out...");
-    // Add your logout logic here
   };
-
-  const DropdownItem = ({ label, href }) => (
-    <a
-      href={href}
-      className="flex items-center pl-12 py-2 text-sm text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
-    >
-      {label}
-    </a>
-  );
 
   return (
     <>
@@ -78,65 +44,40 @@ export default function Sidebar({
           {/* Navigation */}
           <nav className="flex-1 px-4">
             <ul className="space-y-2">
-              {/* Regular Menu Items */}
               {navItems.map((item) => (
                 <li key={item.label}>
-                  {item.action === "register" ? (
-                    <button
-                      onClick={onRegisterDb}
-                      className="w-full flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
-                    >
-                      <item.icon size={20} />
-                      <span className="text-sm font-medium">{item.label}</span>
-                    </button>
-                  ) : item.action === "backup" ? (
-                    <button
-                      onClick={onBackupDb}
-                      className="w-full flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
-                    >
-                      <item.icon size={20} />
-                      <span className="text-sm font-medium">{item.label}</span>
-                    </button>
-                  ) : (
-                    <a
-                      href={item.href}
-                      className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
-                    >
-                      <item.icon size={20} />
-                      <span className="text-sm font-medium">{item.label}</span>
-                    </a>
-                  )}
+                  <button
+                    onClick={
+                      item.action === "register"
+                        ? onRegisterDb
+                        : item.action === "backup"
+                        ? onBackupDb
+                        : undefined
+                    }
+                    className="w-full flex items-center gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
+                  >
+                    <item.icon size={20} />
+                    <span className="text-sm font-medium">{item.label}</span>
+                    {item.status === "coming-soon" && (
+                      <span className="ml-2 text-xs font-semibold text-red-500">
+                        Coming Soon
+                      </span>
+                    )}
+                  </button>
                 </li>
               ))}
 
-              {/* Projects Dropdown */}
+              {/* Databases */}
               <li>
                 <button
-                  onClick={() => {
-                    onBackupDatabases();
-                  }}
+                  onClick={onBackupDatabases}
                   className="w-full flex items-center justify-between gap-4 px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <Folder size={20} />
                     <span className="text-sm font-medium">Databases</span>
                   </div>
-                  {/* <ChevronDown
-                    size={16}
-                    className={`transform transition-transform duration-200 ${
-                      projectsOpen ? "rotate-180" : ""
-                    }`}
-                  /> */}
                 </button>
-                <div
-                  className={`mt-1 overflow-hidden transition-all duration-200 ease-in-out ${
-                    projectsOpen ? "max-h-48" : "max-h-0"
-                  }`}
-                >
-                  {projectItems.map((item) => (
-                    <DropdownItem key={item.label} {...item} />
-                  ))}
-                </div>
               </li>
             </ul>
           </nav>
@@ -159,7 +100,6 @@ export default function Sidebar({
                 </div>
               </button>
 
-              {/* Profile Menu */}
               {profileMenuOpen && (
                 <div className="absolute bottom-full left-0 w-full mb-2 bg-gray-800 rounded-lg shadow-lg overflow-hidden">
                   <button
