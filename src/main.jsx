@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Dashboard from "./pages/Dashboard.jsx";
-import Backups from "./pages/Backups.jsx";
+import Backups from "./components/Dashboard/Backups.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

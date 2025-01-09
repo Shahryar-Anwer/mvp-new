@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Dashboard/Sidebar";
 import DbRegistrationForm from "../components/Dashboard/DbRegistrationForm";
-import Backups from "./Backups";
-import Databases from "./Databases";
+import Backups from "../components/Dashboard/Backups";
+import Databases from "../components/Dashboard/Databases";
 
 export default function Dashboard() {
   const [showDbForm, setShowDbForm] = useState(true);
@@ -39,7 +39,7 @@ export default function Dashboard() {
       />
       <main className="lg:ml-64 p-8">
         {showDbForm && (
-          <div className="max-w-4xl animate-fade-in">
+          <div className="flex flex-col items-center max-w-4xl animate-fade-in">
             <h1 className="text-2xl font-bold text-gray-900 mb-6">
               Register New Database
             </h1>
