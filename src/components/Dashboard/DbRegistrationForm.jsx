@@ -1,4 +1,5 @@
 // import React, { useState } from "react";
+// import axios from "axios"; // Import Axios
 // import { Database, CheckCircle, XCircle } from "lucide-react";
 
 // function DbRegistrationForm() {
@@ -17,17 +18,9 @@
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const response = await fetch("/api/register-db", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(credentials),
-//       });
+//       const response = await axios.post("/api/register-db", credentials);
 
-//       const result = await response.json();
-
-//       if (result.success) {
+//       if (response.data.success) {
 //         setNotification({
 //           show: true,
 //           success: true,
@@ -42,14 +35,17 @@
 //           database: "",
 //         });
 //       } else {
-//         throw new Error(result.message || "Failed to register database");
+//         throw new Error(response.data.message || "Failed to register database");
 //       }
 //     } catch (error) {
 //       console.error("Error registering database:", error);
 //       setNotification({
 //         show: true,
 //         success: false,
-//         message: error.message || "Failed to register database",
+//         message:
+//           error.response?.data?.message ||
+//           error.message ||
+//           "Failed to register database",
 //       });
 //     }
 
@@ -72,9 +68,11 @@
 //       {/* Notification Popup */}
 //       {notification.show && (
 //         <div
-//           className={`absolute top-4 right-4 left-4 p-4 rounded-md ${
+//           className={`fixed top-4 right-4 z-50 p-4 rounded-md transform transition-transform duration-300 ${
 //             notification.success ? "bg-green-50" : "bg-red-50"
-//           } flex items-center gap-2 animate-fade-in shadow-sm`}
+//           } flex items-center gap-2 shadow-md ${
+//             notification.show ? "translate-x-0" : "translate-x-full"
+//           }`}
 //         >
 //           {notification.success ? (
 //             <CheckCircle className="w-5 h-5 text-green-500" />
@@ -183,15 +181,17 @@
 // }
 
 // export default DbRegistrationForm;
+
 import React, { useState } from "react";
+import axios from "axios"; // Import Axios
 import { Database, CheckCircle, XCircle } from "lucide-react";
 
 function DbRegistrationForm() {
   const [credentials, setCredentials] = useState({
-    host: "",
-    user: "",
-    password: "",
-    database: "",
+    host: "localhost",
+    user: "postgres",
+    password: "Ashhad123",
+    database: "EasyParseDB",
   });
   const [notification, setNotification] = useState({
     show: false,
@@ -201,47 +201,44 @@ function DbRegistrationForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const endpoint = "http://10.0.12.94:45455/api/v1/Backup/CreateBackup";
+
     try {
-      const response = await fetch("/api/register-db", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
+      const response = await axios.post(endpoint, {
+        postgresPassword: credentials.password,
+        postgresUser: credentials.user,
+        postgresHost: credentials.host,
+        postgresDatabase: credentials.database,
       });
 
-      const result = await response.json();
+      console.log(response, "response");
 
-      if (result.success) {
+      if (response.data.success || response.data) {
         setNotification({
           show: true,
           success: true,
-          message: "Database registered successfully!",
-        });
-
-        // Clear form
-        setCredentials({
-          host: "",
-          user: "",
-          password: "",
-          database: "",
+          message: "Backup completed successfully!",
         });
       } else {
-        throw new Error(result.message || "Failed to register database");
+        throw new Error(response.data.message || "Failed to complete backup");
       }
     } catch (error) {
-      console.error("Error registering database:", error);
+      console.error("Error during backup:", error);
       setNotification({
         show: true,
         success: false,
-        message: error.message || "Failed to register database",
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to complete backup",
       });
     }
 
     // Hide notification after 3 seconds
     setTimeout(() => {
       setNotification({ show: false, success: false, message: "" });
-    }, 6000);
+    }, 3000);
   };
 
   const handleChange = (e) => {
@@ -280,9 +277,7 @@ function DbRegistrationForm() {
 
       <div className="flex items-center gap-2 mb-6">
         <Database className="w-6 h-6 text-blue-600" />
-        <h2 className="text-xl font-semibold text-gray-800">
-          Register New Database
-        </h2>
+        <h2 className="text-xl font-semibold text-gray-800">Backup Database</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -362,7 +357,7 @@ function DbRegistrationForm() {
           type="submit"
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          Register Database
+          Backup Database
         </button>
       </form>
     </div>
