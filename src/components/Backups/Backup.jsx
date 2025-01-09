@@ -58,7 +58,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Database, RotateCcw } from "lucide-react";
-
+import api from "../../services/api";
 export default function Backup() {
   const [backups, setBackups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,9 +67,10 @@ export default function Backup() {
   useEffect(() => {
     const fetchBackups = async () => {
       try {
-        const response = await axios.get(
-          "http://10.0.12.94:45455/api/v1/Backup/getData"
-        );
+        // const response = await axios.get(
+        //   "http://10.0.12.94:45455/api/v1/Backup/getData"
+        // );
+        const response = await api.get("/getData");
         if (response.data.success) {
           setBackups(response.data.data);
         } else {

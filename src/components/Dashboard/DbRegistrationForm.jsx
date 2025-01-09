@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import { Database, CheckCircle, XCircle } from "lucide-react";
-
+import api from "../../services/api";
 function DbRegistrationForm() {
   const [credentials, setCredentials] = useState({
     host: "localhost",
@@ -14,14 +14,16 @@ function DbRegistrationForm() {
     success: false,
     message: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const endpoint = "http://10.0.12.94:45455/api/v1/Backup/RegisterDatabase";
 
     try {
-      const response = await axios.post(endpoint, {
+      // const response = await axios.post(endpoint, {
+      const response = await api.post("/RegisterDatabase", {
         postgresPassword: credentials.password,
         postgresUser: credentials.user,
         postgresHost: credentials.host,
@@ -36,10 +38,15 @@ function DbRegistrationForm() {
           success: true,
           message: "Backup completed successfully!",
         });
+        setLoading(false);
       } else {
+        setLoading(false);
+
         throw new Error(response.data.message || "Failed to complete backup");
       }
     } catch (error) {
+      setLoading(false);
+
       console.error("Error during backup:", error);
       setNotification({
         show: true,
@@ -173,7 +180,7 @@ function DbRegistrationForm() {
           type="submit"
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          Backup Database
+          {loading ? "Loading..." : "Backup Database"}
         </button>
       </form>
     </div>

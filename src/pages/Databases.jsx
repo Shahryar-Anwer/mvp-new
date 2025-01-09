@@ -8,6 +8,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
+import api from "../services/api";
 
 const backupFrequencies = ["Daily", "Weekly", "Monthly"];
 
@@ -28,9 +29,10 @@ export default function Databases() {
   useEffect(() => {
     const fetchDatabases = async () => {
       try {
-        const response = await axios.get(
-          "http://10.0.12.94:45455/api/v1/Backup"
-        ); // Replace with your API endpoint
+        // const response = await axios.get(
+        //   "http://10.0.12.94:45455/api/v1/Backup"
+        // ); // Replace with your API endpoint
+        const response = await api.get("/");
 
         setDatabases(response.data); // Assuming the API returns a list of databases
         setLoading(false);
@@ -59,14 +61,12 @@ export default function Databases() {
     //   return;
     // }
 
-    console.log(connectionStringDB, "connectionStringDB");
-
-    const connectionStringEncoded = encodeURIComponent(connectionStringDB); // Encode the connection string to ensure it's URL-safe
-    const endpoint = `http://10.0.12.94:45455/api/v1/Backup/CreateBackup?ConnectionString=${connectionStringEncoded}`;
+    const connectionStringEncoded = encodeURIComponent(connectionStringDB);
+    const endpoint = `/CreateBackup?ConnectionString=${connectionStringEncoded}`;
 
     try {
-      const response = await axios.post(endpoint); // Use POST without a request body
-      console.log(response, "response from create Backup");
+      const response = await api.post(endpoint);
+
       setNotification({
         show: true,
         success: true,
