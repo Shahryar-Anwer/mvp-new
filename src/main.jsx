@@ -10,7 +10,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/mvp" element={<App />} />
+        <Route path="/mvp-new/" element={<App />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="backups" element={<Backups />} />
         </Route>
